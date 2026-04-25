@@ -1,20 +1,23 @@
 <?php 
+session_start();
+$user_id=$_SESSION['user_id'] ?? 1;
 $connect  = new mysqli("localhost","root","","mini_pinterest");
-$id = $_GET['id'];
-$sql = "SELECT *FROM posts WHERE id=$id";
+$post_id = $_GET['id'];
+$sql = "SELECT *FROM posts WHERE id=$post_id";
 $result = $connect->query($sql);
 $row = $result->fetch_assoc();
-$board=$connect->query("SELECT * FROM boards");
+$board=$connect->query("SELECT * FROM boards WHERE user_id=$user_id");
+
 if(isset($_POST['board'])){
     $board_id=$_POST['board'];
-    $check = "SELECT * FROM saved_pins WHERE post_id=$id AND board_id=$board_id";
+    $check = "SELECT * FROM saved_pins WHERE post_id=$post_id AND board_id=$board_id AND user_id=$user_id";
     $res = $connect->query($check);
     if($res->num_rows > 0){
         echo "pffts... you already have  saved this silly!";
 
     }
     else{
-        $insert="INSERT INTO saved_pins(post_id,board_id) VALUES($id,$board_id)";
+        $insert="INSERT INTO saved_pins(post_id,board_id,user_id) VALUES($post_id,$board_id,$user_id)";
         $connect->query($insert);
         echo "saved! ⭐";
     } }
