@@ -9,8 +9,9 @@
     <nav>
         <ul class="nav1">
             <li><a href="home_page.php" class="active">HOME</a></li>
-            <li><a href="upload.php">UPLOAD</a></li>
-            <li><a href="board.php">BOARDS</a></li>
+            <li><a href="upload.php">+</a></li>
+            <li><a href="saved.php">BOARDS</a></li>
+            <li><a href="profile.php">PROFILE</a></li>
         </ul>
     </nav>
 </section>
@@ -22,6 +23,9 @@
 </section>
 
 <?php
+session_start();
+$user_id=$_SESSION['user_id'] ?? 1;
+
 include "db.php";
 
 if (isset($_GET['query']) && $_GET['query'] != "") {
