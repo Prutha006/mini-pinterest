@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>Homepage</title>
+    </head>
+
 <body>
-
-
+<section id="s1">
+    <nav>
+        <ul class="nav1">
+            <li><a href="home_page.php" class="active">HOME</a></li>
+            <li><a href="upload.php">UPLOAD</a></li>
+            <li><a href="board.php">BOARDS</a></li>
+        </ul>
+    </nav>
+</section>
+<section id="s2">
 <form method="GET">
     <input type="text" name="query" placeholder="Search pins...">
     <button type="submit">Search</button>
 </form>
-
-<hr>
+</section>
 
 <?php
-$connect = new mysqli("localhost", "root", "", "mini_pinterest");
+include "db.php";
 
 if (isset($_GET['query']) && $_GET['query'] != "") {
     $search = $_GET['query'];
@@ -26,10 +37,17 @@ if (isset($_GET['query']) && $_GET['query'] != "") {
 }
 
 $result = $connect->query($sql);
-
+if($result->num_rows>0){
 while ($row = $result->fetch_assoc()) {
-    echo "<img src='" . $row['image'] . "' width='200'><br>";
+echo "<a href='view.php?id=" . $row['id'] . "'>
+        <img src='" . $row['image'] . "' width='200' alt='Image' style='margin:20px'>
+      </a>";
+  }
 }
+else{
+    echo "Nothing here yet… try searching something  else 🌸";
+}
+
 ?>
 
 </body>
