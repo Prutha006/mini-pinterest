@@ -28,31 +28,35 @@
 <body>
 
 <div class="navbar">
-    <a href="index.php">Home</a>
-    <a href="search.php">Search</a>
-    <a href="saved.php">Saved</a>
+    <a href="home_page.php">Home</a>
+    <a href="saved.php" class="active">boards</a>
+    <a href="upload.php">+</a>
     <a href="profile.php">Profile</a>
 </div>
 
 <div class="content">
 <?php
+session_start();
+$user_id=$_SESSION['user_id'] ?? 1;
 include "db.php";
 
-$board_id = $_GET['id'];
 
-echo "<h1>Board ID: " . $board_id . "</h1>";
+$sql = "SELECT * FROM boards WHERE user_id = $user_id";
+$result = $connect->query($sql);
+?>
 
-$sql = "SELECT * FROM saved_pins WHERE board_id = $board_id";
-$result = $conn->query($sql);
+<h1>Your Boards</h1>
 
+<?php
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<p>Pin ID: " . $row['pin_id'] . "</p>";
+        echo "<a href='board.php?id=" . $row['id'] . "'>" . $row['name'] . "</a><br>";
     }
 } else {
-    echo "No pins yet";
+    echo "You haven't created any boards yet! Please create one ..!🌸 ";
 }
 ?>
 </div>
+
 </body>
 </html>
