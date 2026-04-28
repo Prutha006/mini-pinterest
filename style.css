@@ -1,0 +1,100 @@
+/* BODY */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #2d3250;
+    color: white;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: #424769;
+    padding: 12px;
+    text-align: center;
+}
+
+.navbar a {
+    color: white;
+    margin: 10px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #f6b17a;
+}
+
+/* FORM */
+.form-box {
+    width: 300px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: #424769;
+    border-radius: 10px;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #f6b17a;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e09c60;
+}
+
+/* PINS */
+.pin-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.pin {
+    display: inline-block;
+    margin: 10px;
+}
+.pin img {
+    width: 200px;
+    border-radius: 10px;
+}
+
+/* PROFILE */
+.top {
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-pic {
+    width: 100px;
+    border-radius: 50%;
+}
+
+/* BOARDS */
+.boards {
+    text-align: center;
+}
+
+.board {
+    display: inline-block;
+    background-color: #424769;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.create {
+    background-color: #f6b17a;
+    color: black;
+}
