@@ -20,9 +20,9 @@ $password = $_POST['password'];
  }
 else{
 
-$sql = "INSERT INTO users (username, email, password) 
+$sql = "INSERT INTO users (username, email, password)
         VALUES ('$username', '$email', '$password')";
-    
+
 
 if ($connect->query($sql) === TRUE) {
     $user_id=$connect->insert_id;
