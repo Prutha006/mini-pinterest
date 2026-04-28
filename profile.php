@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 // Fetch user
-$userQuery = $conn->query("SELECT * FROM users WHERE id=$user_id");
+$userQuery = $connect->query("SELECT * FROM users WHERE id=$user_id");
 
 if (!$userQuery || $userQuery->num_rows == 0) {
     die("User not found");
@@ -20,7 +20,10 @@ if (!$userQuery || $userQuery->num_rows == 0) {
 $user = $userQuery->fetch_assoc();
 
 // Fetch boards
-$boardsQuery = $conn->query("SELECT * FROM boards WHERE user_id=$user_id");
+$stmt= $connect->prepare("SELECT * FROM boards WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -84,13 +87,14 @@ $boardsQuery = $conn->query("SELECT * FROM boards WHERE user_id=$user_id");
 <div class="navbar">
     <a href="home_page.php">Home</a>
     <a href="upload.php">upload</a>
-    <a href="saved.php">Saved</a>
-    <a href="profile.php">Profile</a>
+    <a href="saved.php">Boards</a>
+    <a href="profile.php" class="active">Profile</a>
+
 </div>
 
 
+
 <div class="top">
-    <img src="<?= $user['profile_pic'] ?>" class="profile-pic">
     <h2><?= $user['username'] ?></h2>
     <p><?= $user['email'] ?></p>
 </div>
@@ -98,9 +102,9 @@ $boardsQuery = $conn->query("SELECT * FROM boards WHERE user_id=$user_id");
 <div class="boards">
 
 <?php
-if ($boardsQuery && $boardsQuery->num_rows > 0) {
-    while($b = $boardsQuery->fetch_assoc()) {
-        echo "<div class='board'>" . htmlspecialchars($b['name']) . "</div>";
+if ($result && $result->num_rows > 0) {
+    while($board = $result->fetch_assoc()) {
+        echo "<div class='board'>" . htmlspecialchars($board['name']) . "</div>";
     }
 } else {
     echo "<p style='padding:20px;'>No boards yet</p>";
