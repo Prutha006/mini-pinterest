@@ -16,9 +16,9 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     // check user
-    $sql = "SELECT * FROM users 
-            WHERE username='$username' 
-            AND email='$email' 
+    $sql = "SELECT * FROM users
+            WHERE username='$username'
+            AND email='$email'
             AND password='$password'";
 
     $result = $connect->query($sql);
@@ -49,18 +49,17 @@ if (isset($_POST['login'])) {
 <div class="form-box">
     <h2 style="text-align:center;">Login</h2>
 
-```
 <?php if (isset($error)) { echo "<p style='color:red; text-align:center;'>$error</p>"; } ?>
 
 <form method="POST">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br>
+    <label>Username:</label>
+    <input type="text" name="username" required style="max-width : 279px">
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br>
+    <label>Email:</label>
+    <input type="email" name="email" required>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+    <label>Password:</label>
+    <input type="password" name="password" required>
 
     <button type="submit" name="login">Login</button>
 </form>
@@ -68,7 +67,6 @@ if (isset($_POST['login'])) {
 <p style="text-align:center; margin-top:10px;">
     Not a user? <a href="signup.html" style="color:#f6b17a;">Sign up here</a>
 </p>
-```
 
 </div>
 
