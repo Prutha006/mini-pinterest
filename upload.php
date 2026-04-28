@@ -1,69 +1,148 @@
 <!DOCTYPE html>
+
 <html>
-    <head>
+<head>
     <title>Upload Pins</title>
-    </head>
-    <body>
-    <section id="s1">
-         <nav>
-        <ul class="nav1">
-            <li><a href="home_page.php">HOME</a></li>
-            <li><a href="upload.php" class="active">UPLOAD</a></li>
-            <li><a href="board.php">BOARDS</a></li>
-        </ul>
-    </nav>
-</section>
-<section id="s2">
+    <link rel="stylesheet" href="style.css">
+
+
+<style>
+    .form-box {
+        width: 350px;
+        margin: 60px auto;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        text-align: left;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: none;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        height: 80px;
+        resize: none;
+    }
+
+    button {
+        margin-top: 15px;
+    }
+
+    .or {
+        margin: 15px 0;
+        font-weight: bold;
+    }
+</style>
+
+
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="home_page.php">Home</a>
+    <a href="upload.php">Upload</a>
+    <a href="saved.php">Saved</a>
+    <a href="profile.php">Profile</a>
+</div>
+
+<div class="form-box">
+
+
+<h2>Upload Pin</h2>
+
 <form method="POST" enctype="multipart/form-data">
 
-<input type="file" name="image"><br><br>
+    <label>Upload Image:</label>
+    <input type="file" name="image">
 
-OR <br><br>
+    <div class="or">OR</div>
 
-<input type="text" name="image_url" placeholder="Paste image URL"><br><br>
+    <label>Image URL:</label>
+    <input type="text" name="image_url" placeholder="Paste image URL">
 
-<input type="text" name="genre" placeholder="Enter genre"><br><br>
+    <label>Genre:</label>
+    <input type="text" name="genre" placeholder="Enter genre">
 
-<textarea name="description" placeholder="Description of your pin" rows="5" column="15"></textarea><br><br>
+    <label>Description:</label>
+    <textarea name="description" placeholder="Enter description"></textarea>
 
-<button type="submit">Upload</button>
+    <button type="submit">Upload</button>
 
 </form>
 
-</section>
-    </body>
+
+</div>
+
+</body>
 </html>
 
 <?php
-$connect = new mysqli("localhost","root","","mini_pinterest");
+session_start();
+include "db.php";
+
+if (!isset($_SESSION['user_id'])) {
+    die("Please login first");
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    $genre = $_POST['genre'];
-    $desc = $_POST['description'];
+    $genre = trim($_POST['genre']);
+    $desc = trim($_POST['description']);
 
-    // check if file uploaded
+    if ($genre == "" || $desc == "") {
+        echo "Please fill all fields";
+        exit;
+    }
+
+    //  ensure uploads folder exists
+    if (!is_dir("uploads")) {
+        mkdir("uploads", 0777, true);
+    }
+
+    //  handle image
     if (!empty($_FILES['image']['name'])) {
 
-        $name = $_FILES['image']['name'];
+        $name = time() . "_" . basename($_FILES['image']['name']);
         $tmp = $_FILES['image']['tmp_name'];
 
         $path = "uploads/" . $name;
 
-        move_uploaded_file($tmp, $path);
+        if (!move_uploaded_file($tmp, $path)) {
+            echo "Upload failed";
+            exit;
+        }
 
-    } 
-    else {
-        // use URL
-        $path = $_POST['image_url'];
+    } else {
+        $path = trim($_POST['image_url']);
+
+        if ($path == "") {
+            echo "Provide image or URL";
+            exit;
+        }
     }
 
-    $sql = "INSERT INTO posts (image, genre, description)
-            VALUES ('$path', '$genre', '$desc')";
+    //  insert into DB
+    $stmt = $conn->prepare("INSERT INTO posts (image, genre, description) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $path, $genre, $desc);
 
-    $connect->query($sql);
-     echo "Uploaded ✨"; 
-
- 
+    if ($stmt->execute()) {
+        echo "Uploaded ✨";
+    } else {
+        echo "Error uploading";
+    }
 }
 ?>
+
+</div>
+</body>
+</html>
