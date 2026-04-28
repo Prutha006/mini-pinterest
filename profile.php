@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 // Fetch user
-$userQuery = $connect->query("SELECT * FROM users WHERE id=$user_id");
+$userQuery = $conn->query("SELECT * FROM users WHERE id=$user_id");
 
 if (!$userQuery || $userQuery->num_rows == 0) {
     die("User not found");
@@ -20,66 +20,14 @@ if (!$userQuery || $userQuery->num_rows == 0) {
 $user = $userQuery->fetch_assoc();
 
 // Fetch boards
-$stmt= $connect->prepare("SELECT * FROM boards WHERE user_id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
+$boardsQuery = $conn->query("SELECT * FROM boards WHERE user_id=$user_id");
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Profile</title>
-
-    <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-        }
-         .navbar {
-                    background-color: #333;
-                    padding: 10px;
-                }
-                .navbar a {
-                    color: white;
-                    margin: 10px;
-                    text-decoration: none;
-                    font-weight: bold;
-                }
-                .navbar a:hover {
-                    color: yellow;
-                }
-        .top {
-            text-align: center;
-            padding: 30px;
-            background: #f5f5f5;
-        }
-
-        .profile-pic {
-            width: 100px;
-            border-radius: 50%;
-        }
-
-        .boards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            padding: 20px;
-        }
-
-        .board {
-            padding: 30px;
-            background: #eee;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .create {
-            background: #ddd;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -87,14 +35,13 @@ $result = $stmt->get_result();
 <div class="navbar">
     <a href="home_page.php">Home</a>
     <a href="upload.php">upload</a>
-    <a href="saved.php">Boards</a>
-    <a href="profile.php" class="active">Profile</a>
-
+    <a href="saved.php">Saved</a>
+    <a href="profile.php">Profile</a>
 </div>
 
 
-
 <div class="top">
+    <img src="<?= $user['profile_pic'] ?>" class="profile-pic">
     <h2><?= $user['username'] ?></h2>
     <p><?= $user['email'] ?></p>
 </div>
@@ -102,9 +49,9 @@ $result = $stmt->get_result();
 <div class="boards">
 
 <?php
-if ($result && $result->num_rows > 0) {
-    while($board = $result->fetch_assoc()) {
-        echo "<div class='board'>" . htmlspecialchars($board['name']) . "</div>";
+if ($boardsQuery && $boardsQuery->num_rows > 0) {
+    while($b = $boardsQuery->fetch_assoc()) {
+        echo "<div class='board'>" . htmlspecialchars($b['name']) . "</div>";
     }
 } else {
     echo "<p style='padding:20px;'>No boards yet</p>";
