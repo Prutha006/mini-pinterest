@@ -30,37 +30,30 @@
 <div class="navbar">
     <a href="home_page.php">Home</a>
     <a href="upload.php">upload</a>
-    <a href="saved.php">Saved</a>
+    <a href="saved.php" class="active">Boards</a>
     <a href="profile.php">Profile</a>
 </div>
-
-
 
 <div class="content">
 <?php
 session_start();
+$user_id=$_SESSION['user_id'] ?? 1;
 include "db.php";
 
-if (!isset($_SESSION['user_id'])) {
-    die("Please login first");
-}
 
-$user_id = $_SESSION['user_id'];
-
-// ✅ THIS WAS MISSING
 $sql = "SELECT * FROM boards WHERE user_id = $user_id";
-$result = $conn->query($sql);
+$result = $connect->query($sql);
 ?>
 
 <h1>Your Boards</h1>
 
 <?php
-if ($result && $result->num_rows > 0) {
+if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<a href='board.php?id=" . $row['id'] . "'>" . htmlspecialchars($row['name']) . "</a><br>";
+        echo "<a href='board.php?id=" . $row['id'] . "'>" . $row['name'] . "</a><br>";
     }
 } else {
-    echo "No boards found";
+    echo "You haven't created any boards yet! Please create one ..!🌸 ";
 }
 ?>
 </div>
