@@ -1,68 +1,57 @@
+<?php
+session_start();
+include "db.php";
+
+// check board id
+if (!isset($_GET['id'])) {
+    echo "No board selected";
+    exit();
+}
+
+$board_id = intval($_GET['id']); // safe
+
+?>
+
 <!DOCTYPE html>
+
 <html>
 <head>
-    <title>Saved</title>
-    <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-        }
-        .navbar {
-            background-color: #333;
-            padding: 10px;
-        }
-        .navbar a {
-            color: white;
-            margin: 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .navbar a:hover {
-            color: yellow;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
+    <title>Board</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="navbar">
     <a href="home_page.php">Home</a>
-    <a href="search.php">Search</a>
+    <a href="upload.php">Upload</a>
     <a href="saved.php">Saved</a>
     <a href="profile.php">Profile</a>
 </div>
 
-<div class="content">
+<h2 style="text-align:center; margin-top:20px;">Board</h2>
+
+<div class="pin-container">
+
 <?php
-session_start();
-$user_id=$_SESSION['user_id'] ?? 1;
-include "db.php";
+// get posts of this board
+$sql = "SELECT * FROM posts WHERE board_id = $board_id";
+$result = $conn->query($sql);
 
-$board_id = $_GET['id'] ?? 0;
-$board_sql = "SELECT name FROM boards WHERE id = $board_id AND user_id = $user_id";
-$board_res = $connect->query($board_sql);
+if ($result && $result->num_rows > 0) {
 
-
-if ($board_res && $board_res->num_rows > 0) {
-    $board_row = $board_res->fetch_assoc();
-    echo "<h1>" . $board_row['name'] . "</h1>";
-} else {
-    echo "<h1>No board found !</h1>";
-}
-
-$sql = "SELECT posts.image FROM saved_pins JOIN posts ON saved_pins.post_id = posts.id WHERE board_id = $board_id AND user_id = $user_id";
-$result = $connect->query($sql);
-
-if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<img src='" . $row['image'] . "' alt='Pin Image'width='200' style='margin:10px'> ";
+        echo "<div class='pin'>
+                <img src='" . $row['image'] . "' alt='image'>
+              </div>";
     }
+
 } else {
-    echo "No pins yet";
+    echo "<p style='text-align:center;'>No images in this board 🌸</p>";
 }
 ?>
+
 </div>
+
 </body>
 </html>
