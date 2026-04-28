@@ -1,6 +1,12 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* BODY */
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
     background-color: #2d3250;
     color: white;
@@ -17,6 +23,7 @@ body {
     color: white;
     margin: 10px;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .navbar a:hover {
@@ -55,6 +62,11 @@ button:hover {
     background-color: #e09c60;
 }
 
+/* SEARCH INPUT FIX */
+input[type="text"] {
+    width: 300px;
+}
+
 /* PINS */
 .pin-container {
     padding: 20px;
@@ -65,6 +77,7 @@ button:hover {
     display: inline-block;
     margin: 10px;
 }
+
 .pin img {
     width: 200px;
     border-radius: 10px;
@@ -81,20 +94,59 @@ button:hover {
     border-radius: 50%;
 }
 
-/* BOARDS */
+/* BOARDS CONTAINER */
 .boards {
     text-align: center;
+    margin-top: 20px;
 }
 
+/* REMOVE DEFAULT LINK COLOR */
+.boards a {
+    text-decoration: none;
+    color: white;
+}
+
+/* BOARD BOX */
 .board {
     display: inline-block;
     background-color: #424769;
-    padding: 15px;
+    padding: 15px 25px;
     margin: 10px;
     border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
+/* HOVER EFFECT */
+.board:hover {
+    background-color: #f6b17a;
+    color: black;
+}
+
+/* CREATE BUTTON */
 .create {
     background-color: #f6b17a;
     color: black;
+}
+/* FORCE FIX FOR LOGIN INPUTS */
+.form-box input {
+    width: 100% !important;
+    max-width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    box-sizing: border-box; /* IMPORTANT */
+}
+
+.form-box label {
+    display: block;
+    margin-top: 10px;
+}
+
+.form-box {
+    width: 320px;
+    margin: 60px auto;
 }
