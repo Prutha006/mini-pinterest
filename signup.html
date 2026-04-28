@@ -1,22 +1,74 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Signup</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .form-box {
+            width: 320px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 15px;
+        }
+    </style>
+
+
 </head>
+
 <body>
 
-<h2>Sign Up</h2>
+<div class="container">
+    <div class="form-box">
 
-<form action="signup.php" method="POST">
-    <label for="uname">USERNAME :</label><br>
-    <input type="text" id="uname" name="username" placeholder="Enter username" required><br><br>
-    <label for="em">E-MAIL:</label><br>
-    <input type="email" id="em" name="email" placeholder="Enter email" required><br><br>
-    <label for="pass">PASSWARD:</label><br>
-    <input type="password" name="password" placeholder="Enter password" required><br><br>
-    
-    <button type="submit">Sign Up</button>
-</form>
+
+        <h2>Sign Up</h2>
+
+        <form action="signup.php" method="POST">
+
+            <label for="uname">USERNAME:</label>
+            <input type="text" id="uname" name="username" placeholder="Enter username" required>
+
+            <label for="em">E-MAIL:</label>
+            <input type="email" id="em" name="email" placeholder="Enter email" required>
+
+            <label for="password">PASSWORD:</label>
+            <input type="password" name="password" placeholder="Enter password" required>
+
+            <button type="submit">Sign Up</button>
+
+        </form>
+
+    </div>
+
+
+</div>
 
 </body>
 </html>
