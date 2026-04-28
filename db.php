@@ -1,7 +1,7 @@
 <?php
-$connect= new mysqli("127.0.0.1", "root", "", "mini_pinterest");
+$conn = new mysqli("localhost", "root", "", "mini_pinterest");
 
-if ($connect->connect_error) {
-    die("Connection failed: " . $connect->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 ?>
