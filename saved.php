@@ -1,62 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Saved</title>
-    <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-        }
-        .navbar {
-            background-color: #333;
-            padding: 10px;
-        }
-        .navbar a {
-            color: white;
-            margin: 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .navbar a:hover {
-            color: yellow;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="navbar">
-    <a href="home_page.php">Home</a>
-    <a href="upload.php">upload</a>
-    <a href="saved.php" class="active">Boards</a>
-    <a href="profile.php">Profile</a>
-</div>
-
-<div class="content">
 <?php
+// Start session (important for user login)
 session_start();
-$user_id=$_SESSION['user_id'] ?? 1;
-include "db.php";
 
+// Database connection
+$connect = new mysqli("localhost", "root", "", "mini_pinterest");
 
-$sql = "SELECT * FROM boards WHERE user_id = $user_id";
-$result = $connect->query($sql);
-?>
-
-<h1>Your Boards</h1>
-
-<?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<a href='board.php?id=" . $row['id'] . "'>" . $row['name'] . "</a><br>";
-    }
-} else {
-    echo "You haven't created any boards yet! Please create one ..!🌸 ";
+// Check connection
+if ($connect->connect_error) {
+    die("Connection failed: " . $connect->connect_error);
 }
-?>
-</div>
 
-</body>
-</html>
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo "User not logged in";
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Get board name from POST
+if (isset($_POST['name'])) {
+    $name = trim($_POST['name']);
+
+    if ($name == "") {
+        echo "Board name cannot be empty";
+        exit();
+    }
+
+    // Insert into database
+    $stmt = $connect->prepare("INSERT INTO boards (user_id, name) VALUES (?, ?)");
+    $stmt->bind_param("is", $user_id, $name);
+
+    if ($stmt->execute()) {
+        echo "Board created successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+} else {
+    echo "No data received";
+}
+
+$connect->close();
+?>
