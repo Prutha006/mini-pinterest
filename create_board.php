@@ -1,16 +1,7 @@
 <?php
-// Start session (important for user login)
 session_start();
+include "db.php";
 
-// Database connection
-$conn = new mysqli("localhost", "root", "", "pinterest_clone");
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     echo "User not logged in";
     exit();
@@ -18,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get board name from POST
 if (isset($_POST['name'])) {
     $name = trim($_POST['name']);
 
@@ -27,20 +17,17 @@ if (isset($_POST['name'])) {
         exit();
     }
 
-    // Insert into database
     $stmt = $conn->prepare("INSERT INTO boards (user_id, name) VALUES (?, ?)");
     $stmt->bind_param("is", $user_id, $name);
 
     if ($stmt->execute()) {
-        echo "Board created successfully";
+        echo "Board created";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error";
     }
 
     $stmt->close();
 } else {
-    echo "No data received";
+    echo "No data";
 }
-
-$conn->close();
 ?>
